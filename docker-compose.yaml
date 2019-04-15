@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+
+ web:
+  build: 
+   context: .
+   dockerfile: Dockerfile
+  image: krasirus/project
+  restart: always
+  volumes:
+  - ./src:/var/www/html
+  networks:
+  - back
+  ports:
+  - 80:80
+
+ bd:
+  image: mariadb:10.2
+  restart: always
+  environment:
+   MYSQL_USER: proyecto
+   MYSQL_PASSWORD: dbpass
+   MYSQL_DATABASE: proyecto
+   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  networks:
+  - back
+  volumes:
+  - ./db_data:/var/lib/mysql
+
+networks:
+  back:
