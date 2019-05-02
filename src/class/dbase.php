@@ -5,11 +5,12 @@ class dbase{
 	public function __construct(){
 		if(!isset($this->link)){
 			try{
-				$this->link=new PDO('mysql:host=bd;dbname=proyecto','proyecto','dbpass');
-                $this->link->exec('set names utf8mb4');
-                echo"<script>console.log('conection is good')</script>";
+				$this->link=new PDO('mysql:host=bd;dbname=proyecto;charset=utf8','proyecto','dbpass');
+				//$this->link->exec('set names utf8mb4');
+				
+				
 			}catch(PDOExeption $error){
-                print "Cant connect with BD:  ".$error.getMessage();
+                echo "Cant connect with BD:  ".$error.getMessage();
                 echo"<script>console.log('Connection Error')</script>";
 				die();
 			}
