@@ -1,1 +1,1 @@
-<p>Page not Found: Error 404</p>
+<p><b>Error 404</b>. La pagína no existe</p>

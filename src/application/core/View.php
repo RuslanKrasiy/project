@@ -12,12 +12,15 @@ class View{
     }
     public function render($title,$vars=[]){
         extract($vars);
-        $path='application/views/errors/'.$this->path.'.php';
+        $path='application/views/'.$this->path.'.php';
         if(file_exists($path)){
             ob_start();
             require $path;
             $content =ob_get_clean();
+            
             require 'application/views/layouts/'.$this->layout.'.php';
+        }else{
+            echo"nada ".$path;
         }
     }
     public function redirect($url){
@@ -27,8 +30,21 @@ class View{
     public static function errorCode($code){
         http_response_code($code);
         $path='application/views/errors/'.$code.'.php';
-        if(file_exists($path)) require $path;
+        if(file_exists($path)){ 
+            //ob_start();
+            require 'application/views/errors/error_h.php';
+            require $path;
+            require 'application/views/errors/error_f.php';
+            //$content =ob_get_clean();
+            //require 'application/views/layouts/'.$this->layout.'.php';
+        }
         exit;
+    }
+    public function message($status,$message){
+        exit(json_encode(['status'=>$status,'message'=>$message]));
+    }
+    public function locatin($url){
+        exit(json_encode(['url'=>$url]));
     }
    
 }

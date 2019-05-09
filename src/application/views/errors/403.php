@@ -1,1 +1,1 @@
-<p>Page not Found: Error 403</p>
+<p><b>Error 403</b>. Acceso denegado</p>

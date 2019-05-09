@@ -8,11 +8,12 @@ class MainController extends Controller{
 
 
     public function indexAction(){
-        $vars = [
-            'name' => 'Rus',
-            'age' => 31,
-        ];
-        $this->view->render('Main page', $vars);
+       /* $result=$this->model->getNews();
+        $vars=[
+            "news"=>$result,
+        ];*/
+        $this->view->render('Main page');
     }
+
 }
 ?>

@@ -1,0 +1,29 @@
+body{
+    height: 100%;
+    background-color: #DADADA;
+}
+section{
+    height: 100%;
+}
+#hed{
+    margin:0 0 !important;
+}
+nav{
+    margin: 0;
+}
+#hed .form{
+    display: inline-block !important;
+}
+#hed div.item{
+    display: inline-block !important;
+}
+
+body > .grid {
+    height: 100%;
+}
+.image {
+    margin-top: -100px;
+}
+.column {
+    max-width: 450px;
+}

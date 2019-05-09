@@ -1,9 +1,10 @@
 <?php
 class page{
+    private $menu="";
     private $header="";
     private $section="";
     private $footer="";
-
+    private $valor="";
     private $error="";
     private $lacation="";
 
@@ -31,20 +32,21 @@ class page{
         $head.="<head>";
         $head.="<title>Centro de Estetica</title>";
         $head.="<meta charset='utf-8'>";
-        $head.="<link rel='icon' type='image/png' href='img/g54501.png'>";
-        $head.="<link rel='stylesheet' type='text/css' href='semantic/out/semantic.min.css'>";
-        $head.="<script src='semantic/jquery-3.4.0.min.js'></script>";
-        $head.="<script src='semantic/out/semantic.min.js'></script>";
+        $head.="<link rel='icon' type='image/png' href='public/images/g54501.png'>";
+        $head.="<link rel='stylesheet' type='text/css' href='public/semantic/out/semantic.min.css'>";
+        $head.="<script src='public/scripts/jquery-3.1.1.min.js'></script>";
+        $head.="<script src='public/semantic/out/semantic.min.js'></script>";
+        $head.="<link rel='stylesheet' type='text/css' href='public/style/main.css'>";
         $head.="</head>";
         $head.="<body>";
-
-        $head.="<header class='ui fluid container blue inverted segment'>";
+/*
+        $head.="<header class='ui fluid container blue inverted segment' id='hed'>";
         $head.="<div class='ui two column doubling stackable grid container'>";
-        $head.="<div class='column'><img src='img/g511.png'></div>";
+        $head.="<div class='column'><img src='public/images/g511.png'></div>";
         $head.="<div class='column'>";
 
         
-        $head.="<div class='ui right aligned'>";
+        $head.="<div class='ui container'>";
         $head.=$this->header;
         //$head.="<p>Segundo</p>";
         //$head.="<button type='submit' class='ui button' name='logOut'>Salir</button>";
@@ -52,11 +54,12 @@ class page{
         $head.="</div>";
         $head.="</div>";
         $head.="</header>";
-        $head.="<section class='ui container'>";
+        $head.=$this->menu;*/
+        $head.="<section class='ui fluid container'>";
         return $head;
     }
     public function formEntrada(){
-        $form="<div class='ui container'>";
+        /*$form="<div class='ui container'>";
         $form.="<form method='post' class='ui form login' action=''>";
         $form.="<div class='required field'>";
         //$form.="<label>Nombre</label>";
@@ -76,16 +79,55 @@ class page{
         
         $form.="<div class='ui error message'></div>";
         $form.="</form>";
-        $form.="</div>";
-        $form.="<script src='js/form_ent.js'></script>";
-        $this->section=$form;
+        $form.="</div>";*/
+
+    $form="<div class='ui middle aligned center aligned grid'>";
+    $form.="<div class='column'>";
+    $form.="<h2 class='ui teal image header'>";
+    //$form.="<img src='assets/images/logo.png' class='image'>";
+    $form.="<div class='content'>Conexión a su cuenta";
+
+    $form.="</div>";
+    $form.="</h2>";
+    $form.="<form method='post' class='ui large form login' action=''>";
+    $form.="<div class='ui stacked segment'>";
+    $form.="<div class='required field'>";
+    $form.="<div class='ui left icon input'>";
+        $form.="<i class='user icon'></i>";
+        $form.="<input type='text' name='email' placeholder='E-mail address' value=".$this->valor.">";
+    $form.="</div>";
+    $form.="</div>";
+    $form.="<div class='required field'>";
+    $form.="<div class='ui left icon input'>";
+        $form.="<i class='lock icon'></i>";
+        $form.="<input type='password' name='password' placeholder='Password'>";
+    $form.="</div>";
+    $form.="</div>";
+    $form.="<input type='submit' class='ui fluid large teal submit button' name='logIn' value='Entrar'>";
+    $form.="</div>";
+
+    $form.="<div class='ui error message'></div>";
+
+    $form.="</form>";
+    $form.="<p>".$this->error."</p>";
+    $form.="<div class='ui message'>";
+    $form.="<a href='/?ctx=recover'>¿Olvidado contraseña? </a>";
+    //$form.="<div class='ui divider'> / </div>";
+    $form.="<a href='/?new_user=1'> Crear cuenta</a>";
+    $form.="</div>";
+    $form.="</div>";
+    
+    $form.="</div>";
+   
+    $form.="<script src='/public/scripts/form_ent.js'></script>";
+    $this->section=$form;
     }
     public function loged($email){
         $log="<div class='item'>";  
         $log.="<span class='item'>$email</span>";
         $log.="<i class='user circle large icon'></i>";
         $log.="<form method='post' class='ui form' action='index.php'>";
-        $log.="<input type='submit' name='logOut' value='Salir'></form></div>";
+        $log.="<input type='submit' name='logOut' value='Salir' class='ui mini button'></form></div>";
 
         $this->header=$log;
     }
@@ -170,7 +212,7 @@ class page{
             $form.="<div class='ui error message'></div>";
         $form.="</form>";
         $form.="</div>";
-        $form.="<script src='js/form_reg.js'></script>";
+        $form.="<script src='/public/scripts/form_reg.js'></script>";
         $this->section=$form;
     }
     public function pintFooter(){
@@ -209,6 +251,15 @@ class page{
     }
     public function pintSection(){
         return $this->section;
+    }
+    public function menu(){
+        $menu="<nav class='ui fluid container'>";
+        $menu.="<div class='ui secondary pointing fluid right menu'>";
+        $menu.="<a class='active item'  href='/'>Home</a>";
+        $menu.="<a class='item' href='/categorias'>Categorias</a>";
+        $menu.="<a class='item' href='/account'>Mi Gabinete</a>";
+        $menu.="</div></nav>";
+        return $this->menu=$menu;
     }
 }
 
