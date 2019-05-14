@@ -16,12 +16,31 @@ class dbase{
 			}
 		}
 	}
-	public function __get($atributo){
+	public function query($sql,$params=[]){
+        $stmt=$this->link->prepare($sql);
+            if(!empty($params)){
+                foreach ($params as $key => $val) {
+                    $stmt->bindValue(':'.$key,$val);
+                }
+            }
+        $stmt->execute();
+        return $stmt;
+    }
+	public function row($sql,$params=[]){
+        $query=$this->query($sql,$params);
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function column($sql,$params=[]){
+        $query=$this->query($sql,$params);
+        return $query->fetchColumn(PDO::FETCH_ASSOC);
+    }
+    public function __get($atributo){
 		if(property_exists(__CLASS__, $atributo)){
 			return $this->$atributo;
 		}else 
 		return NULL;
 	}
+	
 }
 
 ?>

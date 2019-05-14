@@ -1,9 +1,13 @@
 body{
-    height: 100%;
-    background-color: #DADADA;
+    min-height:900px;
+    
 }
 section{
-    height: 100%;
+    min-height:850px;
+    padding: 1rem;
+}
+#login{
+    max-width: 450px;
 }
 #hed{
     margin:0 0 !important;
@@ -14,16 +18,20 @@ nav{
 #hed .form{
     display: inline-block !important;
 }
-#hed div.item{
+/*#hed div.item{
     display: inline-block !important;
-}
+}*/
 
 body > .grid {
     height: 100%;
 }
-.image {
+header .image {
     margin-top: -100px;
 }
-.column {
-    max-width: 450px;
+h2.blue.header{
+    margin-top:2em;
+}
+footer{
+
+    margin-top:3em !important;
 }

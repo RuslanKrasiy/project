@@ -1,11 +1,11 @@
 <?php
 class votar{
-    private $iduser;
-    private $idgab;
+    private $id_user;
+    private $id_anuncio;
     private $puntos;
 
-    public function __construct($iduser,$idgab,$puntos){
-        $this->iduser=$iduser;
+    public function __construct($id_user,$id_anuncio,$puntos){
+        $this->id_user=$id_user;
         $this->idgub=$idgub;
         $this->puntos=$puntos;
     }
@@ -26,8 +26,8 @@ class votar{
     }
     public function votacion($link){
         try{
-            $consult=$link->prepare("INSERT INTO gabinet(iduser,idgub,puntos)
-            VALUES('$this->iduser','$this->idgub',
+            $consult=$link->prepare("INSERT INTO votar(id_user,idgub,puntos)
+            VALUES('$this->id_user','$this->id_anuncio',
             '$this->puntos')");
             $consult->execute();
         }catch(PDOExeption $error){

@@ -1,13 +1,13 @@
 <?php
 class coment{
-    private $iduser;
-    private $idgub;
+    private $id_user;
+    private $id_anuncio;
     private $fecha;
     private $texto;
 
-    public function __construct($iduser,$idgab){
-        $this->iduser=$iduser;
-        $this->idgub=$idgub;
+    public function __construct($id_user,$idgab){
+        $this->id_user=$id_user;
+        $this->id_anuncio=$id_anuncio;
     }
     
     public function __get($attr){
@@ -26,8 +26,8 @@ class coment{
     }
     public function writeComent($link){
         try{
-            $consult=$link->prepare("INSERT INTO comentarios(iduser,idgub,fecha,texto)
-            VALUES('$this->iduser','$this->idgub','now()','$this->texto')");
+            $consult=$link->prepare("INSERT INTO comentarios(id_user,id_anuncio,fecha,texto)
+            VALUES('$this->id_user','$this->id_anuncio','now()','$this->texto')");
             $consult->execute();
         }catch(PDOExeption $error){
             echo "Error en guardar comentario [ ".$error.getMessage()." ]";

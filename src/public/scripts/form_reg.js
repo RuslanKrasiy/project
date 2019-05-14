@@ -4,7 +4,7 @@ $('.signup')
     on     : 'blur',
     fields: {
     first_name: {
-        identifier: 'first-name',
+        identifier: 'nombre',
         rules: [
         {
             type   : 'empty',
@@ -21,7 +21,7 @@ $('.signup')
         ]
     },
     last_name: {
-        identifier: 'last-name',
+        identifier: 'apellido',
         rules: [
         {
             type   : 'empty',
@@ -34,6 +34,15 @@ $('.signup')
         {
             type   : 'maxLength[15]',
             prompt : 'Please enter your name max 15'
+        }
+        ]
+    },
+    ciudad: {
+        identifier: 'ciudad',
+        rules: [
+        {
+            type   : 'empty',
+            prompt : 'Please enter Ciudad'
         }
         ]
     },
@@ -50,6 +59,15 @@ $('.signup')
         }
         ]
     },
+    email2: {
+        identifier  : 'email2',
+        rules: [
+          {
+            type   : 'match[email]',
+            prompt : 'Please put the same value in both fields'
+          }
+        ]
+      },
     
     password: {
         identifier: 'password',
@@ -64,6 +82,16 @@ $('.signup')
         }
         ]
     },
+    password2: {
+        identifier  : 'password2',
+        rules: [
+          {
+            type   : 'match[password]',
+            prompt : 'Please put the same value in both fields'
+          }
+        ]
+      },
+
     day: {
         identifier: 'day',
         rules: [
@@ -90,6 +118,8 @@ $('.signup')
             prompt : 'Please enter your year'
         }
         ]
-    },
+    }
+    
+    
     }
 });
