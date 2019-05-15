@@ -1,9 +1,9 @@
 <?php
 class user{
-    private $id;
+    private $email;
     private $nombre;
     private $apellido;
-    private $email;
+    
     private $ciudad;
     private $passwd;
     private $foto="user icon";
@@ -43,10 +43,10 @@ class user{
             die();
         }
     }
-    /*public function mod($link){
+    public function update($link){
 		$consult=$link->prepare("UPDATE user SET nombre='$this->nombre' , direccion='$this->direccion' , email='$this->email', pwd='$this->pwd' WHERE dniCliente='$this->dniCliente'");
 		$consult->execute();
-	}*/
+	}
 	public function insert($link){
         try{
             //LAMAR EL FORMULARIO
@@ -63,24 +63,18 @@ class user{
     public function hasAnuncio($link){
         try{
             $consult=$link->prepare(
-                "SELECT * FROM A.anuncio, U.user 
-                where U.id=A.id_user 
-                and U.email = '$this->email'"
+                "SELECT publicacion as pub
+                FROM user 
+                WHERE email='$this->email'"
             );
+            $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en user insert [ ".$error.getMessage()." ]";
+            echo "Error en user hasAnuncio [ ".$error.getMessage()." ]";
             die();
         }
     }
-    public function crearAnuncio($link){
-        try{
-            
-        }catch(PDOExeption $error){
-            echo "Error en user insert [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
+    
     public function showinfo($link){
         
     }

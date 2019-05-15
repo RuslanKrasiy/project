@@ -1,15 +1,16 @@
 <?php
 class anuncio{
-    //private $id;
-    private $id_user;
+    private $id;
+    private $email_user;
     private $id_cat;
     private $titulo;
     private $subtitulo;
     private $descripcion;
     private $fotos;
+    private $contacto;
 
-    public function __construct($iduser){
-        $this->id_user=$iduser;
+    public function __construct($email_user){
+        $this->email_user=$email_user;
     }
     public function __get($attr){
         if(property_exists(__CLASS__, $attr)){
@@ -27,12 +28,12 @@ class anuncio{
     }
     public function insert($link){
         try{
-            $consult=$link->prepare("INSERT INTO anuncio (id_user,id_cat,fecha,titulo,subtitulo,
-        descripcion,fotos) 
+            echo ("INSERT INTO anuncio (email_user,id_cat,fecha,titulo,subtitulo,
+        descripcion,fotos,contacto) 
         VALUES(
             '$this->id_user','$this->id_cat',now(),'$this->titulo','$this->subtitulo',
-            '$this->descripcion','$this->fotos')");
-        $consult->execute();
+            '$this->descripcion','$this->fotos','$this->contacto')");
+        //$consult->execute();
         }catch(PDOExeption $error){
             echo "Error en insertacion con Base de datos [ ".$error.getMessage()." ]";
             die();
@@ -45,8 +46,11 @@ class anuncio{
             subtitulo='$this->subtitulo',
             descripcion ='$this->direccion',
             fotos ='$this->fotos',
-            categoria='$this->id_cat' 
-            WHERE id_user='$this->id_user'");
+            categoria='$this->id_cat',
+            contacto='$this->contacto' 
+            WHERE email_user='$this->email_user'
+            and id='$this->id'
+            ");
             $consult->execute();
         }catch(PDOExeption $error){
             echo "Error en update [ ".$error.getMessage()." ]";
@@ -56,7 +60,9 @@ class anuncio{
     public function delete($link){
         try{
             $consult=$link->prepare("DELETE FROM anuncio 
-            WHERE id_user='$this->id_user'");
+            WHERE email_user='$this->email_user'
+            and id='$this->id'
+            ");
             $consult->execute();
         }catch(PDOExeption $error){
             echo "Error en eliminar [ ".$error.getMessage()." ]";
@@ -67,7 +73,9 @@ class anuncio{
         try{
             $consult=$link->prepare("SELECT *
             FROM anuncio
-            WHERE id_user='$this->id_user'");
+            WHERE email_user='$this->email_user'
+            and id='$this->id'
+            ");
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
@@ -90,7 +98,20 @@ class anuncio{
             die();
         }
     }
-    public function hasAnuncio($link){
+    public function getId($link){
+        try{
+            $consult=$link->prepare(
+                "SELECT MAX(id)+1 AS numId
+                FROM anuncio"
+            );
+            $consult->execute();
+            return $consult->fetch(PDO::FETCH_ASSOC);
+        }catch(PDOExeption $error){
+            echo "Error en user insert [ ".$error.getMessage()." ]";
+            die();
+        }
+    }
+    /*public function hasAnuncio($link){
         try{
             $consult=$link->prepare("SELECT *
             FROM anuncio
@@ -101,7 +122,7 @@ class anuncio{
             echo "Error en hasAnuncio [ ".$error.getMessage()." ]";
             die();
         }
-    }
+    }*/
 }
 /*
 Select A.fotos,A.titulo,A.subtitulo, V.puntos

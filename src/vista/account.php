@@ -109,7 +109,7 @@ class account{
     public function crear(){
         $menu.="<div class='ui segment hidden-cont' id='crear'>";
         $menu.="<h4 class='ui dividing header'>Crear anuncio</h4>";
-        $menu.="<form method='post' class='ui large form login' action=''>";
+        $menu.="<form method='post' class='ui large form login' action='' enctype='multipart/form-data'>";
         $menu.="<input type='hidden' value='".$_SESSION['user']['id']."' name='id_user'>";
 
         $menu.="<div class=''>";
@@ -117,32 +117,36 @@ class account{
         $menu.="<label>Categoria</label>";
         $menu.=$this->valor;
         $menu.="</div>";
+
         $menu.="<div class='required field'>";
         $menu.="<label>Titulo</label>";
-
         $menu.="<input placeholder='Titulo' type='text' name='titulo'>";
-
         $menu.="</div>";
+
         $menu.="<div class='required field'>";
         $menu.="<label>Subtitulo</label>";
-
         $menu.="<input placeholder='Subtitulo' type='text' name='subtitulo'>";
-
         $menu.="</div>";
-        $menu.="<div class='sixteen wide required field right floated'>";
-        $menu.="<label>Descripción</label>";
 
-
-        $menu.="<textarea name='descripcion'></textarea>";
-
+        $menu.="<div class='required field'>";
+        $menu.="<label>Contacto</label>";
+        $menu.="<input placeholder='Numero movil o correo electronico' type='text' name='contacto'>";
         $menu.="</div>";
+
         $menu.="<div class='required field'>";
         $menu.="<label>Fotos</label>";
-
-        $menu.="<input placeholder='Subir fotos' type='file' name='foto'>";
-
+		$menu.="<input type='hidden' name='MAX_FILE_SIZE' value='1024000'/>";
+		$menu.="<input type='file' name='imagen[]' value='Elige imagenes:' multiple/><br>";
         $menu.="</div>";
+
+
+        $menu.="<div class='sixteen wide required field right floated'>";
+        $menu.="<label>Descripción</label>";
+        $menu.="<textarea name='descripcion'></textarea>";
+        $menu.="</div>";
+
         $menu.="<input type='submit' class='ui fluid large teal submit button' name='crearAnun' value='Crear anuncio'>";
+
         $menu.="</div>";
         $menu.="<div class='ui error message'></div>";
         $menu.="</form>";

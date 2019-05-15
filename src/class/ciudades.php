@@ -23,7 +23,7 @@ class ciudades{
     public function getCiudades($link){
         try{
             $consult=$link->prepare(
-                "SELECT * FROM ciudades"
+                "SELECT * FROM ciudad"
             );
             $consult->execute();
             return $consult->fetchAll(PDO::FETCH_ASSOC);
@@ -35,7 +35,7 @@ class ciudades{
     public function mostCiudad($link){
         try{
             $consult=$link->prepare(
-                "SELECT * FROM ciudades  WHERE id=$this->id"
+                "SELECT * FROM ciudad  WHERE id=$this->id"
             );
             $consult->execute();
             return $consult->fetchAll(PDO::FETCH_ASSOC);

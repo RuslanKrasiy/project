@@ -18,21 +18,52 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
         if($_SESSION['user']['publicacion']=='0'){
             $perfil->crear="disabled";
             $perfil->mostar="";
- 
         }else{
             $perfil->crear="";
             $perfil->mostar="disabled";
         }
  
         if(isset($_POST['crearAnun'])){
+            //COMPROBAR SI TIENE ANUNCIOS 
             $bd=new dbase();
-            $anuncio=new anuncio($_SESSION['user']['id']);
-            $anuncio->id_cat=$_POST['categoria'];
-            $anuncio->titulo=$_POST['titulo'];
-            $anuncio->subtitulo=$_POST['subtitulo'];
-            $anuncio->descripcion=$_POST['descripcion'];
-            $anuncio->fotos="/img/foto1.png";
-            $anuncio->insert($bd->link);
+            $user=new user();
+            $user->email=$_SESSION['user']['email'];
+            $n=$user->hasAnuncio($bd->link);
+            
+            if($n['pub']!='0'){
+                $anuncio=new anuncio($_SESSION['user']['email']);
+                $numId=$anuncio->getId($bd->link);
+                if($numId['numId']==NULL) $numId['numId']='1';
+                $nombreDirectorio="img/anuncios/".$numId['numId'];
+                mkdir($nombreDirectorio, 0777, true);
+                $nombreDirectorio.="/";
+                $fotos_url='';
+                for ($i=0; $i < count($_FILES['imagen']['name']); $i++) { 
+                    if(is_uploaded_file($_FILES['imagen']['tmp_name'][$i])){
+                        $img=$_FILES['imagen'];
+                        $nombreFichero=$img['name'][$i];
+                        $nuevo_nombre=explode(".",$nombreFichero);
+                        $idUnico=time();
+                        $nombreFichero="mygabinete_".$idUnico.".".$nuevo_nombre[1];
+                        $nombreCompleto = $nombreDirectorio.$nombreFichero;
+                        move_uploaded_file($img['tmp_name'][$i],$nombreCompleto);
+                        $fotos_url.=$nombreCompleto.",";
+                    }else{
+                        echo "No se ha podido subir el fichero";
+                        $error=True;
+                    }
+                }
+                $anuncio->id_cat=$_POST['categoria'];
+                $anuncio->titulo=$_POST['titulo'];
+                $anuncio->subtitulo=$_POST['subtitulo'];
+                $anuncio->descripcion=$_POST['descripcion'];
+                $anuncio->contacto=$_POST['contacto'];
+                $anuncio->fotos=$fotos_url;
+                $anuncio->insert($bd->link);
+            }else{
+                echo "No tienes derechos al publicar. Ya tienes un anuncio publicado.";
+            }
+            
             //$anuncio->showAnuncio($bd->link);
             $perfil->perfilMenu();
             //$perfil->pintAccount();
@@ -109,13 +140,13 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
         if(($fila=$user->exist($bd->link))&&(password_verify($_POST['password'], $fila['passwd']))){
 
             $_SESSION['user']=[
-                'id'=>$fila['id'],
                 'email'=>$fila['email'],
                 'nombre'=>$fila['nombre'],
                 'apellido'=>$fila['apellido'],
                 'ciudad'=>$fila['ciudad'],
                 'publicacion'=>$fila['publicacion'],
-                'fecha_nac'=>$fila['fecha_nac']
+                'fecha_nac'=>$fila['fecha_nac'],
+                'foto'=>$fila['foto']
             ];
             redirect("/");
         }else{
