@@ -9,8 +9,8 @@ class anuncio{
     private $fotos;
     private $contacto;
 
-    public function __construct($email_user){
-        $this->email_user=$email_user;
+    public function __construct(){
+
     }
     public function __get($attr){
         if(property_exists(__CLASS__, $attr)){
@@ -28,12 +28,17 @@ class anuncio{
     }
     public function insert($link){
         try{
-            echo ("INSERT INTO anuncio (email_user,id_cat,fecha,titulo,subtitulo,
-        descripcion,fotos,contacto) 
-        VALUES(
-            '$this->id_user','$this->id_cat',now(),'$this->titulo','$this->subtitulo',
-            '$this->descripcion','$this->fotos','$this->contacto')");
-        //$consult->execute();
+            $consult=$link->prepare("INSERT INTO anuncio  
+        VALUES('$this->id',
+            '$this->email_user',
+            '$this->id_cat',
+            '$this->titulo',
+            '$this->subtitulo',
+            '$this->descripcion',
+            '$this->contacto',
+            '$this->fotos',
+            now(),'0','0')");
+        $consult->execute();
         }catch(PDOExeption $error){
             echo "Error en insertacion con Base de datos [ ".$error.getMessage()." ]";
             die();
@@ -69,12 +74,11 @@ class anuncio{
             die();
         }
     }
-    public function showAnuncio($link){
+    public function visitorAnuncio($link,$id){
         try{
             $consult=$link->prepare("SELECT *
             FROM anuncio
-            WHERE email_user='$this->email_user'
-            and id='$this->id'
+            WHERE id='$id'
             ");
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
@@ -83,14 +87,15 @@ class anuncio{
             die();
         }
     }
-    public function showGabinet($link){
+
+    public function verAnuncio($link){
         try{
             $consult=$link->prepare("SELECT Cat.cat_name, An.titulo, An.subtitulo, An.fotos,
             An.descripsion,sum(V.puntos), count(Com.*),
             FROM anuncio An,votar V, categoria Cat, comentarios Com
             WHERE Cat.id = An.id_cat
             and An.id=V.id_anuncio
-            and id_user='$this->id_user'");
+            and email_user='$this->email_user'");
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){

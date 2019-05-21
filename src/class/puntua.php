@@ -1,13 +1,13 @@
 <?php
-class coment{
+class puntua{
     private $id_user;
     private $id_anuncio;
-    private $fecha;
-    private $texto;
+    private $puntos;
 
-    public function __construct($id_user,$idgab){
+    public function __construct($id_user,$id_anuncio,$puntos){
         $this->id_user=$id_user;
-        $this->id_anuncio=$id_anuncio;
+        $this->idgub=$idgub;
+        $this->puntos=$puntos;
     }
     
     public function __get($attr){
@@ -24,13 +24,14 @@ class coment{
             return NULL;
         }
     }
-    public function writeComent($link){
+    public function votacion($link){
         try{
-            $consult=$link->prepare("INSERT INTO comentarios(id_user,id_anuncio,fecha,texto)
-            VALUES('$this->id_user','$this->id_anuncio','now()','$this->texto')");
+            $consult=$link->prepare("INSERT INTO votar(id_user,idgub,puntos)
+            VALUES('$this->id_user','$this->id_anuncio',
+            '$this->puntos')");
             $consult->execute();
         }catch(PDOExeption $error){
-            echo "Error en guardar comentario [ ".$error.getMessage()." ]";
+            echo "Error en votacion [ ".$error.getMessage()." ]";
             die();
         }
     }

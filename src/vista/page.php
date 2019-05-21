@@ -7,7 +7,7 @@ class page{
     private $section="";
     private $footer="";
     
-    private $valor="";// form entrada
+    private $valor="";
     
     private $error="";
     private $location="";
@@ -56,8 +56,6 @@ class page{
         
         $head.="<div>";
         $head.=$this->user;
-        //$head.="<p>Segundo</p>";
-        //$head.="<button type='submit' class='ui button' name='logOut'>Salir</button>";
         $head.="</div>";
         $head.="</div>";
         $head.="</div>";
@@ -66,12 +64,13 @@ class page{
     }
     public function menu(){
         $menu="<nav class='ui fluid container' >";
-        $menu.="<div class='ui secondary pointing right menu' id='main'>";
+        $menu.="<div class='ui secondary pointing menu' id='main'>";
+        
+        $menu.="<div class='right menu'>";
         $menu.="<a class='item'  href='/'>Home</a>";
-        $menu.="<a class='item' href='/?categorias=1'>Categorias</a>";
-        $menu.="<a class='item' href='/?account=1'>Mi Gabinete</a>";
+        $menu.="<a class='item' href='/?account=1'>Mi perfil</a> </div>";
         $menu.="</div></nav>";
-        $menu.="<section class='ui fluid container'>";
+        $menu.="<section class='ui container'>";
         return $this->menu=$menu;
     }
     public function loged($email){
@@ -80,6 +79,11 @@ class page{
         $log.="<i class='user circle large icon'></i>";
         $log.="<form method='post' class='ui form' action='/'>";
         $log.="<input type='submit' name='logOut' value='Salir' class='ui mini button'></form>";
+        $this->user=$log;
+    }
+    public function notloged(){
+        $log="<form method='post' class='ui form' action='/'>";
+        $log.="<input type='submit' name='access' value='Entrar' class='ui mini button'></form>";
         $this->user=$log;
     }
     public function formEntrada(){
@@ -124,39 +128,45 @@ class page{
     public function registrar(){
         $form="<section class='ui fluid container'>";
         $form.="<div class='ui container'>";
+        $form.="<div class='ui blue inverted segment'>";
+        $form.="<h4 class='ui header'>Nueva cuenta</h4>";
+        $form.="</div>";
         $form.="<form method='post' class='ui form signup' action=''>";
-        $form.="<h4 class='ui dividing header'>Nueva cuenta</h4>";
         
+        $form.="<div class='two fields'>";
         $form.="<div class='required field'>";
-        //$form.="<label>Nombre</label>";
         $form.="<label>Nombre</label>";
-            $form.="<div class='six wide field'>";
+            $form.="<div class='field'>";
                 $form.="<input type='text' name='nombre' 
-                    placeholder='Nombre' value=''></div>";
-            $form.="<div class='six wide field'>";
+                    placeholder='Nombre' value=''></div></div>";
+        $form.="<div class='required field'>";
+            $form.="<label>Apellido</label>";
+            $form.="<div class='field'>";
                 $form.="<input type='text' name='apellido' 
-                placeholder='Apellido'></div>";
+                placeholder='Apellido'></div></div>";
         $form.="</div>";  
         
-       
+        $form.="<div class='two fields'>";
+
         $form.="<div class='required field'>";
-        $form.="<label>Email</label>";
-            $form.="<div class='six wide field'>";
+        $form.="<label>Correo electronico</label>";
                 $form.="<input type='email' name='email' 
-                    placeholder='Correo electronico' value=''></div>";
-
-            $form.="<div class='six wide field'>";
-                $form.="<input type='email' name='email2' 
-                placeholder='Repite tu correo electronico' value=''></div>";
-        $form.='</div>';
-
-        
+                    placeholder='micorreo@gmail.com' value=''></div>";
         $form.="<div class='required field'>";
-        $form.="<label>Contraseña</label>";
-            $form.="<div class='six wide field'>";
+        $form.="<label>Confirmar correo electronico</label>";
+                $form.="<input type='email' name='email2' 
+                placeholder='micorreo@gmail.com' value=''></div></div>";
+
+        $form.="<div class='two fields'>";
+       
+            $form.="<div class='required field'>";
+            $form.="<label>Contraseña</label>";
                 $form.="<input type='password' name='password'
                     placeholder='Contraseña'></div>";
-            $form.="<div class='six wide field'>";
+
+            
+            $form.="<div class='required field'>";
+            $form.="<label>Confirmar contraseña</label>";
                 $form.="<input type='password' name='password2'
                 placeholder='Repite tu contraseña'></div>";
         $form.="</div>";
@@ -169,49 +179,24 @@ class page{
             
                 $form.=$this->valor;
         $form.="</div></div>";
+
+
+
         $form.="<div class='required field'>";
-        $form.="<label>Fecha de nacimiento</label>";
-            $form.="<div class='three fields'>";
-                
-                $form.="<div class='two wide required field'>";
-                    $form.="<select class='ui search dropdown' name='day'>";
-                    $form.="<option value=''>Dia</option>";
-                        for($i=1;$i<32;$i++){
-                            $form.="<option value='$i'>$i</option>";
-                        }
-                        
-                    $form.="</select>";
-                $form.="</div>";
+        $form.="<label>Tipo de cuenta</label>";
+        $form.="<div class='four wide field'>";
+        $form.="<select class='ui search dropdown' id='tipoCuenta' name='tipo'>";
+        //$form.="<option value=''>Selecione..</option>";
+        $form.="<option value='cliente'  selected='selected'>Basica</option>";
+        $form.="<option value='profesional'>Avanzada (Para autonomos)</option>";
+        $form.="</select>";
+        $form.="</div></div>";
 
-                $form.="<div class='two wide required field'>";
-                    $form.="<select class='ui search dropdown'  name='month'>";
-                        $form.="<option value=''>Mes</option>";
-                        $form.="<option value='1'>Enero</option>";
-                        $form.="<option value='2'>Febrero</option>";
-                        $form.="<option value='3'>Marzo</option>";
-                        $form.="<option value='4'>Abril</option>";
-                        $form.="<option value='5'>Mayo</option>";
-                        $form.="<option value='6'>Junio</option>";
-                        $form.="<option value='7'>Julio</option>";
-                        $form.="<option value='8'>Agosto</option>";
-                        $form.="<option value='9'>Septiembre</option>";
-                        $form.="<option value='10'>Octubre</option>";
-                        $form.="<option value='11'>Noviembre</option>";
-                        $form.="<option value='12'>Deciembre</option>";
-                    $form.="</select>";
-                $form.="</div>";
 
-            $form.="<div class='two wide required field'>";
-                    $form.="<select class='ui search dropdown' name='year'>";
-                        $form.="<option value=''>Año</option>";
-                        for($i=2010;$i>1955;$i--){
-                            $form.="<option value='$i'>$i</option>";
-                        }
-                        
-                    $form.="</select>";
-                $form.="</div>";
-                $form.="</div>";
-            $form.="</div>";
+
+        $form.="<div class='required field' id='fecha-nac' style=''>";
+       
+        $form.="</div>";
 
             $form.="<div class='six wide inline field'>";
                     $form.="<label>Al hacer clic en Registrar , aceptas nuestras <a href='#'>Condiciones</a>
@@ -221,7 +206,7 @@ class page{
                 $form.="</div>";
             
 
-            $form.="<input type='submit' class='ui blue submit button' name='signup' value='Registrarse'>";
+            $form.="<input type='submit' class='ui blue submit button' name='signup' value='Registrar'>";
             $form.="<a class='ui button' href='/'>Cancelar</a>";
             $form.="<div class='ui error message'></div>";
         $form.="</form>";
@@ -231,43 +216,57 @@ class page{
     }
     public function pintFooter(){
         $footer="</section><footer>";
-        /*$footer="</section>
-        <footer class='ui fluid raised very padded container inverted segment'style='margin-bottom:0;'>";
-       $footer.="<div class='ui three column doubling stackable grid container'>";
-            $footer.="<div class='column'>";
-                $footer.="<h4>Informacion</h4>";
-                $footer.="<div class='ui padded text inverted segment'>";
-                    $footer.="<p><a href='#'>Nuestro equipo</a></p>";
-                    $footer.="<p><a href='#'>Política de datos</a></p>";
-                    $footer.="<p><a href='#'>Política de cookies</a></p>";
-                $footer.="</div>";
-            $footer.="</div>";
-            $footer.="<div class='column'>";
-                $footer.="<h4>Cantacto</h4>";
-                $footer.="<div class='ui padded text inverted segment'>";
-                    $footer.="<p><a href='#'>soporte@gmail.com</a></p>";
-                    $footer.="<p>av.Blasco Ibañes 128, 1</p>";
-                    $footer.="<p>Valencia, 46014</p>";
-                $footer.="</div>";
-            $footer.="</div>";
-            $footer.="<div class='column'>";
-                $footer.="<h4>Columnas</h4>";
-                $footer.="<div class='ui padded text inverted segment'>";
-                    $footer.="<p>Columnas</p>";
-                $footer.="</div>";
-            $footer.="</div>";
-        $footer.="</div>";
-        $footer.="<div class='ui divider'></div>";
-
-        
-        $footer.="<div class='ui fluid center aligned container'>";
-            $footer.="<p>Diseñado por : <a href='#' class=''>Ruslan Krasiy</a></p>";
-        $footer.="</div>";*/
         $footer.="</footer>";
         $footer.="</body></html>";
         return $footer;
     }
+    public function emailInro(){
+        $form="<section class='ui fluid container'>";
+        $form.="<div class='ui blue inverted segment'>";
+        $form.="<h4 class='ui header'>Recuperar contraseña</h4>";
+        $form.="</div>";
+        $form.="<div class='ui container'>";
+        $form.="<form class='ui form' action='' method='post' id='introForm'>";
+        $form.="<div class='eight wide field'>";
+        $form.="<div class='required field'>";
+        $form.="<label>Correo electronico</label>";
+        $form.="<input type='email' placeholder='joe@schmoe.com' name='userEmail'>";
+        $form.="</div></div>";
+        $form.="<label class='ui header'>$this->error</label><br>";
+        $form.="<input type='submit' class='ui submit blue button' name='compEmail' value='Submit'>";
+        $form.="<a class='ui button' href='/'>Cancelar</a>";
+        $form.="<div class='ui error message'></div>";
+        $form.="</form></div>";
+        $form.="<script src='public/scripts/recover.js'></script>";
+        return $this->section=$form;
+    }
+    public function formPwd(){
+        $menu="<section class='ui fluid container'>";
+        $menu.="<div class='ui blue inverted segment'>";
+        $menu.="<h4 class='ui header'>Recuperar contraseña</h4>";
+        $menu.="</div>";
+        $menu.="<form class='ui form segment success' action='' method='post' >";
+        $menu.="<div class='two fields'>";
+        $menu.="<input type='hidden' name='email' value='$this->valor'>";
+        $menu.="<div class='required field'>";
+        $menu.="<label>Nueva contraseña</label>";
+        $menu.="<input placeholder='Nueva contraseña' type='password' id='nuevoPwd' name='nuevoPwd'>";
 
+        $menu.="</div>";
+       
+        $menu.="<div class='required field'>";
+        $menu.="<label>Repite contraseña</label>";
+        $menu.="<input placeholder='Repetir contraseña' type='password' name='repitPwd' >";
+
+        $menu.="</div></div>";            
+        $menu.="<input type='submit' class='ui submit blue button'
+        id='recoverPwd' name='recoverPwd' value='Recuperar'>";
+        $menu.="<a class='ui button' href='/'>Cancelar</a>";
+        $menu.="<div class='ui error message'></div>";
+        $menu.="</form></div>";
+        $menu.="<script src='public/scripts/recover.js'></script>";
+        return $this->section=$menu;
+    }
     public function pintSection(){
         return $this->section;
     }

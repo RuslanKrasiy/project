@@ -7,7 +7,8 @@ class dbase{
 			try{
 				$this->link=new PDO('mysql:host=bd;dbname=proyecto;charset=utf8','proyecto','dbpass');
 				//$this->link->exec('set names utf8mb4');
-				
+				//$this->link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                //$this->link->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 				
 			}catch(PDOExeption $error){
                 echo "Cant connect with BD:  ".$error.getMessage();

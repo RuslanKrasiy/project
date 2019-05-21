@@ -1,5 +1,5 @@
 <?php
-class ciudades{
+class ciudad{
     private $id;
 
     public function __construct(){

@@ -1,5 +1,5 @@
 <?php
-class notice{
+class guestAnuncio extends anuncio{
     private $id;
     private $title;
     private $subTitle;

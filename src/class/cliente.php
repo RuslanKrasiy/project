@@ -1,10 +1,11 @@
 <?php
-class categorias{
-    private $nombre;
+class cliente extends usuario{
+    private $fecha_reg;
 
     public function __construct(){
 
     }
+
     public function __get($attr){
         if(property_exists(__CLASS__, $attr)){
             return $this->$attr;
@@ -20,17 +21,19 @@ class categorias{
             return NULL;
         }
     }
-    public function getCategorias($link){
+
+    public function insertCLiente($link){
         try{
-            $consult=$link->prepare(
-                "SELECT * FROM categoria"
-            );
+            //LAMAR EL FORMULARIO
+            $consult=$link->prepare("CALL insert_cliente 
+            ('$this->email','$this->nombre','$this->apellido','$this->ciudad'
+            ,'$this->foto','$this->passwd',now())");
             $consult->execute();
-            return $consult->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            echo "Error en user insert [ ".$error.getMessage()." ]";
             die();
         }
     }
+
 }
 ?>
