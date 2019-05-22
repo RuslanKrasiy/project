@@ -1,5 +1,5 @@
 $("#coment").click(function(){
-    $.post("prueba.php",
+    $.post("compr.php",
     {
         comenta:"1",
         texto:$("#texto").val(),

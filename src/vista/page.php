@@ -10,9 +10,11 @@ class page{
     private $valor="";
     
     private $error="";
-    private $location="";
-    private $disable1="";
-    private $disable2="";
+
+    private $nombre='';
+    private $apellido='';
+    private $systemError="";
+    private $regError="hidden";
 
     public function __construct(){
 
@@ -32,6 +34,9 @@ class page{
             return NULL;
         }
     }
+    /**
+     * HEAD DE LA PAGINA( LINK,SCRIPT)
+     */
     public function head(){
         $head="<!Doctype html>";
         $head.="<html lang='Es-es'>";
@@ -47,6 +52,9 @@ class page{
         $head.="<body>";
         return $head;
     }
+    /**
+     * CBECERA DE LA PAGINA
+     */
     public function headerHTML(){
         $head="<header class='ui fluid container blue inverted segment' id='hed'>";
         $head.="<div class='ui grid'>";
@@ -62,6 +70,9 @@ class page{
         $head.="</header>";
         return $this->header=$head;
     }
+    /**
+     * BARA DE MENU
+     */
     public function menu(){
         $menu="<nav class='ui fluid container' >";
         $menu.="<div class='ui secondary pointing menu' id='main'>";
@@ -73,6 +84,9 @@ class page{
         $menu.="<section class='ui container'>";
         return $this->menu=$menu;
     }
+    /**
+     * EN CABECERA MUESTRA BOTON DE SALIDA
+     */
     public function loged($email){
         
         $log="<span class='item'>$email</span>";
@@ -81,11 +95,17 @@ class page{
         $log.="<input type='submit' name='logOut' value='Salir' class='ui mini button'></form>";
         $this->user=$log;
     }
+    /**
+     * EN CABECERA MUESTRA BOTON DE ENTRADA
+     */
     public function notloged(){
         $log="<form method='post' class='ui form' action='/'>";
         $log.="<input type='submit' name='access' value='Entrar' class='ui mini button'></form>";
         $this->user=$log;
     }
+    /**
+     * FORMULARIO PARA ENTRAR(AUTORIZACION DE USUARIO)
+     */
     public function formEntrada(){
         $form="<section class='ui fluid container'>";
         $form.="<div class='ui middle aligned center aligned grid'>";
@@ -125,6 +145,9 @@ class page{
         $form.="<script src='/public/scripts/form_ent.js'></script>";
         $this->section.=$form;
     }
+    /**
+     * FORMULARIO PARA REGISTRAR NUEVO USUAIRO
+     */
     public function registrar(){
         $form="<section class='ui fluid container'>";
         $form.="<div class='ui container'>";
@@ -138,12 +161,12 @@ class page{
         $form.="<label>Nombre</label>";
             $form.="<div class='field'>";
                 $form.="<input type='text' name='nombre' 
-                    placeholder='Nombre' value=''></div></div>";
+                    placeholder='Nombre' value='$this->nombre'></div></div>";
         $form.="<div class='required field'>";
             $form.="<label>Apellido</label>";
             $form.="<div class='field'>";
                 $form.="<input type='text' name='apellido' 
-                placeholder='Apellido'></div></div>";
+                placeholder='Apellido' value='$this->apellido'></div></div>";
         $form.="</div>";  
         
         $form.="<div class='two fields'>";
@@ -208,18 +231,28 @@ class page{
 
             $form.="<input type='submit' class='ui blue submit button' name='signup' value='Registrar'>";
             $form.="<a class='ui button' href='/'>Cancelar</a>";
-            $form.="<div class='ui error message'></div>";
+            $form.="<div class='ui $this->regError message'><p>ERROR: Usuario con este email ya existe! 
+              Por favor introduce otro correo electronico</p></div>";
         $form.="</form>";
+        //$form.="<h3 class='ui header'>$this->regError</h3>";
         $form.="</div>";
+        
         $form.="<script src='/public/scripts/form_reg.js'></script>";
         $this->section.=$form;
     }
+    /**
+     * PINTA EL FOOTER
+     */
     public function pintFooter(){
-        $footer="</section><footer>";
+        $footer="</section><footer><p id='systemError'>$this->systemError</p>";
         $footer.="</footer>";
         $footer.="</body></html>";
         return $footer;
     }
+    /**
+     * FORMULARIO PARA RENOVAR LA CONTRASEÑA 
+     * PARA NO AUTORIZADO
+     */
     public function emailInro(){
         $form="<section class='ui fluid container'>";
         $form.="<div class='ui blue inverted segment'>";
@@ -240,6 +273,10 @@ class page{
         $form.="<script src='public/scripts/recover.js'></script>";
         return $this->section=$form;
     }
+   /**
+     * FORMULARIO PARA RENOVAR LA CONTRASEÑA 
+     * A TRAVES DE "MI PERFIL"
+     */
     public function formPwd(){
         $menu="<section class='ui fluid container'>";
         $menu.="<div class='ui blue inverted segment'>";
@@ -264,50 +301,27 @@ class page{
         $menu.="<a class='ui button' href='/'>Cancelar</a>";
         $menu.="<div class='ui error message'></div>";
         $menu.="</form></div>";
+        
         $menu.="<script src='public/scripts/recover.js'></script>";
         return $this->section=$menu;
     }
+    /**
+     * PINTA EL CONTENEDOR SECTION
+     */
     public function pintSection(){
         return $this->section;
     }
+    /**
+     * PINTA LA CABECERA
+     */
     public function pintHeader(){
         return $this->header;
     }
+    /**
+     * PINTA EL MENU
+     */
     public function pintMenu(){
         return $this->menu;
-    }
-    public function account(){
-       
-        
-    }
-    public function anuncio(){
-        $sst="<div class='ui card'>";
-        $sst.="<div class='image'>";
-        $sst.="<a href='?id=".$this->valor['id']."'>";
-        $sst.="<img src=".$this->valor['fotos'].">";
-        $sst.="</div>";
-        $sst.="<div class='content'>";
-        $sst.="<div class='header'>".$this->valor['titulo']."</div>";
-        $sst.="<div class='description'>".$this->valor['subtitulo']."</div>";
-        $sst.="</div>";
-        $sst.="<div class='ui two bottom attached buttons'>";
-        $sst.="<div class='ui button'>";
-        $sst.="<i class='add icon'></i>Queue";
-
-        $sst.="</div>";
-        $sst.="<div class='ui primary button'>";
-        $sst.="<i class='play icon'></i>Watch";
-
-        $sst.="</div>";
-        $sst.="</div>";
-        $sst.="</div>";
-        $sst.="</a>";
-        $sst.="<div class='ui popup'>";
-        $sst.="<div class='header'>Puntuación de usuario</div>";
-        $sst.="<div class='ui star rating' data-rating=".$this->valor['puntos']."></div>";
-        $sst.="</div>";
-    
-        return $sst;
     }
     
 }

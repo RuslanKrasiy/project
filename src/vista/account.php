@@ -8,6 +8,8 @@ class account{
     private $crear='';
     private $mostrar="";
     private $ciudad="";
+
+    private $anuncios="";
     public function __construct(){
 
     }
@@ -26,6 +28,11 @@ class account{
             return NULL;
         }
     }
+/**
+ * CONTENEDOR QUE MUESTRA 
+ * INFORMACION DEL USUARIO 
+ * EN ´MI PEFIL´
+ */
     public function info(){
         $menu="<div class='ui segment hidden-cont' id='info'>";
         $menu.="<h4 class='ui dividing header'>Infomación</h4>";
@@ -52,6 +59,9 @@ class account{
         $menu.="</div>";
         return $menu;
     }
+/**
+ * CAMPO PARA CAMBIAR CONTRASEÑA EN MI PERFIL
+ */
     public function passwd(){
         $menu="<div class='ui segment hidden-cont' id='passwd'>";
         $menu.="<form class='ui form' action='' method='post'>";
@@ -79,6 +89,9 @@ class account{
         $menu.="<script src='public/scripts/recover.js'></script>";
         return $menu;
     }
+/**
+ * EDITAR INFORMACION DEL PERFIL Y SUBIR UNA FOTO
+ */
     public function edit(){
         $menu="<div class='ui segment hidden-cont' id='edit'>";
         $menu.="<form class='ui form' 
@@ -117,6 +130,9 @@ class account{
         $menu.="</div>";
         return $menu;
     }
+/**
+ * CREAR SU PROPIO ANUNCIO
+ */
     public function crear(){
         $menu="<div class='ui segment hidden-cont' id='crear'>";
         $menu.="<h4 class='ui dividing header'>Crear anuncio</h4>";
@@ -163,7 +179,19 @@ class account{
         $menu.="</div>";
         return $menu;
     }
-    
+/**
+ * CONTENEDOR PARA MOSTRAR ANUNCIOS PUBLICADOS
+ * SE RELLENA DE CODIGO HTML A TRAVES DE JQUERY
+ */
+    public function anuncio(){
+        $menu="<div class='ui segment hidden-cont' id='cont-anuncio'>";
+        $menu.="</div>";
+        return $menu;
+
+    }
+/**
+ * MENU DE "MI PERFIL"
+ */
     public function perfilMenu(){
         $menu="<section class='ui fluid container'>";
         $menu.="<div class='ui container'>";
@@ -180,15 +208,18 @@ class account{
         $menu.="<a class='active item' href='#'data-name='info'>Infomación</a>";
         $menu.="<a class='item' href='#'data-name='passwd'>Cambiar contraseña</a>";
         $menu.="<a class='item' href='#'data-name='edit'>Editar perfil</a>";
-        $menu.="<a class='item' href='#'data-name='crear' style='display:".$this->crear.";'>Crear anuncio</a>";
-        $menu.="<a class='item' href='/?anuncio=yes'data-name='anuncio' style='display:".$this->crear.";'>Ver anuncio</a>";
+        $menu.="<a class='item' href='#'data-name='crear' 
+        style='display:".$this->crear.";'>Crear anuncio</a>";
+
+        $menu.="<a class='item' href='#' data-name='cont-anuncio' id='btn-anuncio' data-id='".$_SESSION['user']['email']."'
+        style='display:".$this->crear.";'>Ver anuncio</a>";
         $menu.="</div></div>";
         $menu.="<div class='eleven wide stretched column'>";
         $menu.=$this->info();
         $menu.=$this->passwd();
         $menu.=$this->edit();
         $menu.=$this->crear();
-        //$menu.=$this->mostrar();
+        $menu.=$this->anuncio();
         $menu.="</div>";
         $menu.="<script>
             $('.hidden-cont').hide();
@@ -208,12 +239,13 @@ class account{
 
         $this->menu=$menu;
     }
+/**
+ * PINTA EL MENU DE "MI PERFIL"
+ */
     public function pintAccount(){
         return $this->menu;
     }
-    public function bodyMenu(){
-
-    }
+    
 
 }
 

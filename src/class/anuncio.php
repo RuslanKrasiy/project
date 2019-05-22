@@ -40,40 +40,13 @@ class anuncio{
             now(),'0','0')");
         $consult->execute();
         }catch(PDOExeption $error){
-            echo "Error en insertacion con Base de datos [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
-    public function update($link){
-        try{
-            $consult=$link->prepare("UPDATE anuncio
-            set titulo='$this->titulo',
-            subtitulo='$this->subtitulo',
-            descripcion ='$this->direccion',
-            fotos ='$this->fotos',
-            categoria='$this->id_cat',
-            contacto='$this->contacto' 
-            WHERE email_user='$this->email_user'
-            and id='$this->id'
-            ");
-            $consult->execute();
-        }catch(PDOExeption $error){
-            echo "Error en update [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
-    public function delete($link){
-        try{
-            $consult=$link->prepare("DELETE FROM anuncio 
-            WHERE email_user='$this->email_user'
-            and id='$this->id'
-            ");
-            $consult->execute();
-        }catch(PDOExeption $error){
-            echo "Error en eliminar [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
+/**
+ * DETALLES DE ANUNCIO
+ */
     public function visitorAnuncio($link,$id){
         try{
             $consult=$link->prepare("SELECT *
@@ -83,26 +56,16 @@ class anuncio{
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en show [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
-
-    public function verAnuncio($link){
-        try{
-            $consult=$link->prepare("SELECT Cat.cat_name, An.titulo, An.subtitulo, An.fotos,
-            An.descripsion,sum(V.puntos), count(Com.*),
-            FROM anuncio An,votar V, categoria Cat, comentarios Com
-            WHERE Cat.id = An.id_cat
-            and An.id=V.id_anuncio
-            and email_user='$this->email_user'");
-            $consult->execute();
-            return $consult->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOExeption $error){
-            echo "Error en showGAbinet [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
+/**
+ * DEVUELVE ULTIMO ID QUE SE ENCUENTRE EN BASE DE DATOS.
+ * NECESITO HACER ASI, PORQUE EN TIEMPO DE CREAR ANUNCIO
+ * NECESITO CREAR LA CARPETA PARA GUARDAR FOTO DE DICHO 
+ * ANUNCIO. 
+ */
     public function getId($link){
         try{
             $consult=$link->prepare(
@@ -112,29 +75,10 @@ class anuncio{
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en user insert [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
-    /*public function hasAnuncio($link){
-        try{
-            $consult=$link->prepare("SELECT *
-            FROM anuncio
-            WHERE id_user='$this->id_user'");
-            $consult->execute();
-            return $consult->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOExeption $error){
-            echo "Error en hasAnuncio [ ".$error.getMessage()." ]";
-            die();
-        }
-    }*/
 }
-/*
-Select A.fotos,A.titulo,A.subtitulo, V.puntos
-From anuncio A,votar V
-where A.id=V.id_anuncio
-and A.id_user = "13"
 
-
- */
 ?>

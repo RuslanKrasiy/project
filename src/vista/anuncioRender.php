@@ -1,4 +1,9 @@
 <?php
+/**
+ * CLASE PARA PINTAR UN SOLO ANUNCIO
+ * Y RECORER ESE CLASE DENTRO DE UN FOR 
+ * PARA MOSTRAR TODOS ANUNCIOS
+ */
 class anuncioRender{
     private $puntos;
     private $id;
@@ -26,6 +31,9 @@ class anuncioRender{
             return NULL;
         }
     }
+    /**
+     * EL CODIGO PARA MOSTRAR UN ANUNCIO
+     */
     public function mostrar(){
         $card="<div class='ui special cards'>";
         $card.="<div class='card'>";

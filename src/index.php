@@ -10,19 +10,26 @@ session_start();
     });
 $st=new page();
 $datos=[];
-
+$msg="";
+/**
+ *  Al pulsar boton SALIR
+ */
 if(isset($_POST['logOut'])){
     session_destroy();
 }
 
+/**
+ *  Si usuario esta autorizado
+ */
 if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
 
     if(isset($_GET['account'])){
-        
+        /**
+         * Al pulsar  button del menu 'Mi perfil'
+         */
         $bd=new dbase();
         $ciudades = new ciudad();
         $datos['ciudad']=$ciudades->getCiudades($bd->link);
-        //var_dump($datos['ciudad']);
         $perfil=new account();
         $perfil->ciudad=drawSelect($datos['ciudad'],"ciudad",$_SESSION['user']['ciudad']);
 
@@ -42,8 +49,9 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
             $perfil->valor=drawSelect($datos['categoria'],'categoria');
         }
         if(isset($_POST['cambPasswd'])){
-            //$bd=new dbase();
-            //$user=new usuario();
+            /**
+             * Dentro de PERFIL pulsar CAMBIAR CONTRASEÑA
+             */
             $user->email=$_SESSION['user']['email'];
             if(($fila=$user->exist($bd->link))&&(password_verify($_POST['oldPwd'], $fila['passwd']))){
                 $paswd=$_POST['nuevoPwd'];
@@ -54,6 +62,9 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
                 $st->error="La contaseña incorecta";
             }
         }if(isset($_POST['updateProfil'])){
+            /**
+             * DENTRO de PERFIL pulsar EDITAR DATOS PERSONALES
+             */
             $user=new usuario();
             $user->email=$_SESSION['user']['email'];
             $nombreDirectorio="img/anuncios/";
@@ -67,7 +78,7 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
                 $nombreCompleto = $nombreDirectorio.$nombreFichero;
                 move_uploaded_file($img['tmp_name'],$nombreCompleto);
             }else{
-                echo "No se ha podido subir el fichero";
+                $st->error= "No se ha podido subir el fichero";
             }
             $user->nombre=$_POST['nombre'];
             $user->apellido=$_POST['apellido'];
@@ -119,7 +130,6 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
                 echo "El limite de imgagenes son 4";
             }
         }
-        // CAMBIAR
         $st->loged($_SESSION['user']['email']);
         $st->headerHTML();
         $perfil->perfilMenu();
@@ -152,14 +162,20 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
  
     }else{
         /**
-         * imprime todos anuncios 
+         * IMPRIME TODOS ANUNCIOS
          */
         $bd=new dbase();
-        $consult=$bd->link->prepare("Select id, fotos, titulo, subtitulo, 
-        ROUND( puntos/ votados,1) as puntos, votados
-        From anuncio");
-        $consult->execute();
-        $row=$consult->fetchAll(PDO::FETCH_ASSOC);
+       
+        try{
+            $consult=$bd->link->prepare("Select id, fotos, titulo, subtitulo, 
+            ROUND( puntos/ votados,1) as puntos, votados
+            From anuncio");
+            $consult->execute();
+            $row=$consult->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOExeption $error){
+            systemError($error.getMessage());
+            die();
+        }
         $anunciosRender = new anuncioRender();
 
         for($i=0;$i<count($row);$i++){
@@ -180,7 +196,7 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
     }
 }else{
      /**
-     * Acceso sin autorizacion.
+     * NO AUTORIZADO
      * 
      */
     if(isset($_POST['recoverPwd'])){
@@ -205,27 +221,35 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
         //registro
         //
         $bd=new dbase();
-        $paswd=$_POST['password'];
-        $hash = password_hash($paswd, PASSWORD_DEFAULT);
-        $user=new $_POST['tipo']();
-
-        $user->nombre=$_POST['nombre'];
-        $user->apellido=$_POST['apellido'];
+        $user=new usuario();
         $user->email=$_POST['email'];
-        $user->ciudad=$_POST['ciudad'];
-        $user->passwd=$hash;
-        if($_POST['tipo']=="cliente"){
-            $user->insertCliente($bd->link);
-        }else if($_POST['tipo']=="profesional"){
-            $data=$_POST['year']."-".$_POST['month']."-".$_POST['day'];
-            $user->fecha_nac=$data;
-            $user->insertProf($bd->link);
-        }
-        /**
-         * Despues del registro , tiene que pasar por autorizacion
-         */
-        $st->formEntrada();
-        //redirect("/");
+        if(!$fila=$user->exist($bd->link)){
+            $paswd=$_POST['password'];
+            $hash = password_hash($paswd, PASSWORD_DEFAULT);
+            $user=new $_POST['tipo']();
+
+            $user->nombre=$_POST['nombre'];
+            $user->apellido=$_POST['apellido'];
+            $user->email=$_POST['email'];
+            $user->ciudad=$_POST['ciudad'];
+            $user->passwd=$hash;
+            if($_POST['tipo']=="cliente"){
+                $user->insertCliente($bd->link);
+            }else if($_POST['tipo']=="profesional"){
+                $data=$_POST['year']."-".$_POST['month']."-".$_POST['day'];
+                $user->fecha_nac=$data;
+                $user->insertProf($bd->link);
+            }
+            /**
+            * Despues del registro , tiene que pasar por autorizacion
+            */
+            $st->formEntrada();
+         }else{
+            $st->nombre=$_POST['nombre'];
+            $st->apellido=$_POST['apellido'];
+            $st->regError="visible";
+            $st->registrar();
+         }
     }else
     if(isset($_POST['logIn'])){
         /**
@@ -265,12 +289,17 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
             $st->registrar();
     }else 
     if(isset($_GET['recover'])){
+        /**
+         * recuperar la contraseña
+         */
         $st->emailInro();
         if(isset($_POST['compEmail'])){
+            
             $bd=new dbase();
             $user=new usuario();
             $user->email=$_POST['userEmail'];
             if($fila=$user->exist($bd->link)){
+                //si email existe en base de datos
                 $st->valor=$_POST['userEmail'];
                 $st->formPwd();
                 
@@ -280,24 +309,59 @@ if(isset($_SESSION['user']) && !isset($_POST['logOut'])){
             }
         }
     }else 
+    if(isset($_GET['detalles'])){
+        $bd=new dbase();
+        $anuncio=new anuncio();
+        $coments=new comenta();
+        $row=$anuncio->visitorAnuncio($bd->link,$_GET['detalles']);
+
+        $visitor=new gabinet($_GET['detalles']);
+        
+        $comentarios=$coments->getAllComents($bd->link,$_GET['detalles']);
+        $visitor->comentsAll($comentarios);
+        $visitor->titulo=$row['titulo'];
+        $visitor->subtitulo=$row['subtitulo'];
+        $visitor->contacto=$row['contacto'];
+        $visitor->descripcion=$row['descripcion'];
+        $nuevo_nombre=explode("/",$row['fotos']);
+
+        for($i=0;$i<(count($nuevo_nombre)-1);$i++){
+            $datos[$i]="img/anuncios/".$row['id']."/".$nuevo_nombre[$i];
+        }
+        $visitor->fotos($datos);
+        $st->notloged();
+        $st->headerHTML();
+        $st->menu();
+        $st->section=$visitor->pintGabinet();
+    }else 
     if(isset($_POST['votar'])){
+        //si no esta autoriado no puede votar
         $st->formEntrada();
     }else 
     if(isset($_POST['user_coment'])){
+        //si no esta autoriado no puede vot
         $st->formEntrada();
     }else 
     if(isset($_GET['account'])){
+        //si no esta autoriado no puede vot
         $st->formEntrada();
     }else{
+        //si no esta autorizado
+        //muestro todos anuncios
         $st->notloged();
         $st->headerHTML();
         $st->menu();
         $bd=new dbase();
-        $consult=$bd->link->prepare("Select id, fotos, titulo, subtitulo, 
-       ROUND( puntos/ votados,1) as puntos, votados
-        From anuncio");
-        $consult->execute();
-        $row=$consult->fetchAll(PDO::FETCH_ASSOC);
+        try{
+            $consult=$bd->link->prepare("Select id, fotos, titulo, subtitulo, 
+        ROUND( puntos/ votados,1) as puntos, votados
+            From anuncio");
+            $consult->execute();
+            $row=$consult->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOExeption $error){
+            systemError($error.getMessage());
+            die();
+        }
         $anunciosRender = new anuncioRender();
         
         for($i=0;$i<count($row);$i++){
@@ -318,6 +382,7 @@ echo $st->head();
 echo $st->pintHeader();
 echo $st->pintMenu();
 echo $st->pintSection();
+$st->systemError=$msg;
 echo $st->pintFooter();
 ?>
 <script>
@@ -327,7 +392,7 @@ echo $st->pintFooter();
             initialRating: 3,
             maxRating: 5,
             onRate:function (rating) {
-                $.post("prueba.php",
+                $.post("compr.php",
                 {
                     puntua:"1",
                     rate:rating,
@@ -339,7 +404,76 @@ echo $st->pintFooter();
             $(this).rating('disable');
             }
         });
+$("#btn-anuncio").click(function(){
+    $.post("compr.php",
+            {
+                anuncio:"1",
+                email:$(this).attr('data-id'),
+            },
+        function(data,status){
+            var datos=[];
+            var main=$("#cont-anuncio");
+            main.empty();
+            var str=data.split("@");
+            for (var i =0;i < str.length; i++) {
+                datos[i]=str[i].split("?");
+            }
 
+            for (var i =0;i < datos.length; i++) {
+            var div1=$("<div></div>").attr("class",'ui special cards');
+            var div2=$("<div></div>").attr("class",'card');
+            var div3=$("<div></div>").attr("class",'content');
+            var div4=$("<div></div>").attr("class",'right floated meta');
+            var i1=$("<i></i>").attr("class",'heart outline like icon');
+            div4.append(i1);
+            div4.append("Puntuación media "+datos[i][0]);
+            div3.append(div4);// @@@
+    
+            var div5=$("<div></div>").attr("class",'blurring dimmable image');
+
+            var div6=$("<div></div>").attr("class","ui dimmer");
+            var div7=$("<div></div>").attr("class",'content');
+            var div8=$("<div></div>").attr("class",'center');
+            
+            var a=$("<a></a>").attr({"class":"ui inverted button",
+                "href":"/?detalles="+datos[i][1]+"'"}).text("Detalles");
+            div7.append(div8);
+            div6.append(div7);
+            div5.append(div6);//@@@@
+
+            var img=$("<img>").attr("src", datos[i][2]).css({'object-fit':'cover',
+                'height': '400px','width':'100%'});
+            div5.append(img);
+
+            var div9=$("<div></div>").attr("class",'content');
+            //var a2=$("<a></a>").attr("class",'header').text(datos[i][3]);
+            var div10=$("<div></div>").attr("class",'meta');
+            var span=$("<span></span>").attr("class","date").text(datos[i][4]);
+            div10.append(span);
+            div9.append("<a class='header'>"+datos[i][3]+"</a>");
+            div9.append(div10);
+
+            var div11=$("<div></div>").attr("class","extra content");
+            var div12=$("<div></div>").attr({"class":'ui heart rating',
+                "data-id":data[i][1],"data-rating":'3'});
+
+            var div13=$("<div></div>").attr("class",'item right floated');
+            var i2=$("<i></i>").attr("class",'users icon');
+            
+            div13.append(i2);
+            div13.append(datos[i][5]);
+
+            div12.append(div13);
+            div11.append(div12);
+            div2.append(div3);
+            div2.append(div5);
+            div2.append(div9);
+            div2.append(div11);
+            div1.append(div2);
+            main.append(div1);
+            }
+        });
+});
 $('.toggle.example .rating').rating('enable');
 
 $('.special.cards .image').dimmer({on: 'hover'});

@@ -38,10 +38,15 @@ class usuario{
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
+    /**
+     * FUNCION QUE DEVUELVE QUE TIPO 
+     * DE USURIO SE HA AUTIRIZADO.
+     * CLIENTE O PROFESILONAL
+     */
     public function whoIs($link){
         try{
             $consult=$link->prepare(
@@ -50,7 +55,7 @@ class usuario{
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
@@ -64,7 +69,7 @@ class usuario{
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
@@ -76,7 +81,7 @@ class usuario{
             $consult->execute();
             return $consult->fetch(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
@@ -88,7 +93,7 @@ class usuario{
             $consult->execute();
                 
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
@@ -98,7 +103,21 @@ class usuario{
             VALUES('$this->email','$id',now(),'$texto')");
             $consult->execute();
         }catch(PDOExeption $error){
-            echo "Error en guardar comentario [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
+            die();
+        }
+    }
+    public function misAnuncios($link){
+        try{
+            $consult=$link->prepare("SELECT A.id, A.fotos, A.titulo,A.subtitulo,
+            ROUND(A.puntos/A.votados,1) as puntos,A.votados
+            From anuncio A
+            where A.email_user= '$this->email'
+            ");
+            $consult->execute();
+            return $consult->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOExeption $error){
+            systemError($error.getMessage());
             die();
         }
     }

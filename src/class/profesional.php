@@ -30,25 +30,12 @@ class profesional extends usuario{
             ,'$this->foto','$this->passwd','$this->fecha_nac','0')");
             $consult->execute();
         }catch(PDOExeption $error){
-            echo "Error en user insert [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }
 
-    public function misAnuncios($link){
-        try{
-            $consult=$link->prepare("SELECT A.id, A.fotos, A.titulo,A.subtitulo,
-            ROUND(A.puntos/A.votados,1) as puntos,A.votados
-            From anuncio A
-            where A.email_user= '$this->email'
-            '");
-            $consult->execute();
-            return $consult->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOExeption $error){
-            echo "Error en showGAbinet [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
+
 
 }
 ?>

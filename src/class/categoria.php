@@ -28,7 +28,7 @@ class categoria{
             $consult->execute();
             return $consult->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en exist [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }

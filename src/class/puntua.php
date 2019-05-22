@@ -24,16 +24,6 @@ class puntua{
             return NULL;
         }
     }
-    public function votacion($link){
-        try{
-            $consult=$link->prepare("INSERT INTO votar(id_user,idgub,puntos)
-            VALUES('$this->id_user','$this->id_anuncio',
-            '$this->puntos')");
-            $consult->execute();
-        }catch(PDOExeption $error){
-            echo "Error en votacion [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
+    
 }
 ?>

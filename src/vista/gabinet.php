@@ -1,4 +1,8 @@
 <?php
+/**
+ * CLASSE PARA MOSTRAR 
+ * DETALLES DE UN ANUNCIO PUBLICADO
+ */
 class gabinet{
   private $id;
 
@@ -31,6 +35,9 @@ class gabinet{
           return NULL;
       }
   }
+  /**
+   * MUESTRA LA INFORMACION DEL ANUNCION
+   */
   public function mainInfo(){
     $det="<div class='ui container'>";
     $det.="<div class='ui segment'>";
@@ -45,6 +52,10 @@ class gabinet{
     $det.="</div>";
     return $det;
   }
+  /**
+   * EN CARUSELA MUESTRA TODOS FOTOS 
+   * QUE ACOMPAÑAN EL ANUNCIO
+   */
   public function fotos($datos){
       $foto="<div class='ui container'>";
       $foto.="<h3 class='ui header'>Fotos</h3>";
@@ -74,6 +85,10 @@ class gabinet{
       $foto.="<script src='public/scripts/slidegalery.js'></script>";
       return $this->fotos=$foto;
   }
+  /**
+   * MUESTRA TODOS COMENTARIOS
+   * DE ANUNCIO PUBLICADO
+   */
   public function comentsAll($coment){
     $com="<h3 class='ui header'>Comentarios</h3>";
     $com.="<p></p>";
@@ -119,6 +134,10 @@ class gabinet{
     $com.="<script src='public/scripts/coment.js'></script>";
     return $this->comentarios=$com;
   }
+  /**
+   * PINTA TODOS SUS ATRIBUTOS 
+   * 
+   */
   public function pintGabinet(){
     $this->gabinet=$this->fotos;
     $this->gabinet.=$this->mainInfo();

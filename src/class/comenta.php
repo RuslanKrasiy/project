@@ -28,17 +28,6 @@ class comenta{
         }
     }
 
-    public function writeComent($link){
-        try{
-            $consult=$link->prepare("INSERT INTO comentario(email,id_anuncio,fecha,texto)
-            VALUES('$this->email','$this->id_anuncio',now(),'$this->texto')");
-            $consult->execute();
-        }catch(PDOExeption $error){
-            echo "Error en guardar comentario [ ".$error.getMessage()." ]";
-            die();
-        }
-    }
-
     public function getAllComents($link,$id){
         try{
             $consult=$link->prepare("Select u.nombre, u.apellido,u.foto, c.fecha,c.texto
@@ -48,7 +37,7 @@ class comenta{
             $consult->execute();
             return $consult->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOExeption $error){
-            echo "Error en guardar comentario [ ".$error.getMessage()." ]";
+            systemError($error.getMessage());
             die();
         }
     }

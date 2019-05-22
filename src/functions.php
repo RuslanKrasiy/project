@@ -1,4 +1,7 @@
 <?php
+/**
+ * PINTA SELECT DE CIUDADES Y CATEGORIAS
+ */
 function drawSelect($row,$name,$id=""){
     $select="<select class='ui dropdown' name='$name'>";
         $select.="<option value=''>Selecione...</option>";
@@ -11,24 +14,25 @@ function drawSelect($row,$name,$id=""){
     $select.="</select>";
     return $select;
 }
-
-function allAnuncios($link){
-    try{
-        $consult=$link->prepare("Select A.id,A.fotos,A.titulo,A.subtitulo, V.puntos
-        From anuncio A,votar V
-        where A.id=V.id_anuncio");
-        $consult->execute();
-        return $consult->fetch(PDO::FETCH_ASSOC);
-    }catch(PDOExeption $error){
-        echo "Error en showGAbinet [ ".$error.getMessage()." ]";
-        die();
-    }
+/**
+ * ASIGNA A LA VARIABLE GLOBAL VALOR DE ERROR
+ */
+function systemError($error){
+    global $msg;
+    $msg="Se ha producidoun error. Error ".$error;
 }
+/**
+ * REDIRECIONA 
+ */
 function redirect($url, $statusCode = 303)
 {
    header('Location: ' . $url, true, $statusCode);
    exit;
 }
+/**
+ * CREAR UNA CADENA DE CARACTERES.
+ * POR DEFECTO TIENE 30 CARACTERES.
+ */
 function random_str($num=30){
     return substr(str_shuffle('0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'),0,$num);
 }
